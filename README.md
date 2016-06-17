@@ -1,4 +1,4 @@
-# TestOutboundConnections
+# TestConnections
 A simple Java application to test connectivity from your application server to the outside world on http and https.
 
 Simply enter your proxy parameters and you should be all set

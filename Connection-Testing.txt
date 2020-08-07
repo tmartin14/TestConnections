@@ -1,0 +1,105 @@
+Connection Testing - Making sure Splunk can access the outside world.
+
+# Create a test_connection3.py file (python3)
+import datetime
+import requests
+import base64
+
+# Variables
+timeout=3
+use_proxy=False
+proxies = {
+    'http': 'http://username:password@10.10.1.0:3128',
+    'https': 'https://username:password@10.10.1.0:3128',
+}
+appd_url='https://pss-it-appd-controller.prod.aws.glic.com:8181/controller/rest/applications'
+appd_connect_string = "appd_user@customer1:appd_password"
+
+print('Trying Google')
+print('Start Time: ' + str(datetime.datetime.now()))
+if use_proxy:
+  response = requests.get('https://google.com/', proxies=proxies, timeout=timeout)
+else:
+  response = requests.get('https://google.com/', timeout=timeout)
+
+print(response)
+print('  End Time: ' + str(datetime.datetime.now()))
+
+
+print('\n')
+print('Start Time: ' + str(datetime.datetime.now()))
+print('Trying AppDynamics Controlleri @ ' + appd_url)
+
+# set up the headers
+auth_token = base64.b64encode(appd_connect_string.encode("ascii")).decode("ascii")
+headers =  {'Authorization': 'Basic {}'.format(auth_token)}
+print('  Headers= ' + str(headers))
+
+if use_proxy:
+  response = requests.get(appd_url, headers=headers, timeout=timeout, proxies=proxies)
+else:
+  response = requests.get(appd_url, headers=headers, timeout=timeout)
+
+print(response)
+print('  End Time: ' + str(datetime.datetime.now()))
+
+ 
+##### Run this command
+#/opt/splunk/bin/splunk cmd python3 test_connection3.py
+ 
+
+
+ 
+-----------------------------------------------------------------------
+ 
+# Create a test_connection27.py file (python2.7)
+
+import datetime
+import urllib2
+import base64
+
+# Varialbes
+timeout=3
+proxyurl='http://username:password@proxy.zzzz.com:8080'
+appd_url='https://pss-it-appd-controller.prod.aws.glic.com:8181/controller/rest/applications'
+appd_connect_string = "appd_user@customer1:appd_password"
+
+
+# Setup the proxy
+proxy = urllib2.ProxyHandler({'http': proxyurl})
+opener = urllib2.build_opener(proxy)
+urllib2.install_opener(opener)
+
+print('Trying Google')
+print('Start Time: ' + str(datetime.datetime.now()))
+response = urllib2.urlopen('https://google.com/',timeout=timeout)
+print(response.getcode())
+print('  End Time: ' + str(datetime.datetime.now()))
+
+print('\n')
+print('Trying AppDynamics Controller @ '+ appd_url)
+print('Start Time: ' + str(datetime.datetime.now()))
+
+# set up the headers
+auth_token = base64.b64encode(appd_connect_string.encode("ascii")).decode("ascii")
+headers =  {'Authorization': 'Basic {}'.format(auth_token)}
+
+# Test the connection
+request =  urllib2.Request(appd_url, headers=headers)
+response = urllib2.urlopen(request, timeout=timeout)
+
+print('  End Time: ' + str(datetime.datetime.now()))
+
+
+##### Run this command
+#/opt/splunk/bin/splunk cmd python2 test_connection27.py
+ 
+ 
+-----------------------------------------------------------------------
+ 
+ # AppDynamics helpers
+website:  https://docs.appdynamics.com/display/PRO45/Application+Model+API#ApplicationModelAPI-RetrieveAllBusinessApplications
+command (no proxy): curl -v -L user:pass --user user1@customer1:appd_password "https://host:port/controller/rest/applications" 
+
+command (w/proxy) : curl -v -L -x http://proxy.zzzz.com:8080 --proxy-user user:pass --user user1@customer1:appd_password "https://host:port/controller/rest/applications"
+

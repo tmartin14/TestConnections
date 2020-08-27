@@ -1,6 +1,62 @@
 Connection Testing - Making sure Splunk can access the outside world.
 
-# Create a test_connection3.py file (python3)
+# Create a test_connection3.py file (python3)  for New Relic
+import datetime
+import requests
+import base64
+
+# Variables
+timeout=3
+use_proxy=False
+proxies = {
+    'http': 'http://username:password@10.10.1.0:3128',
+    'https': 'https://username:password@10.10.1.0:3128',
+}
+newr_url='https://api.newrelic.com/v2/applications.json'
+newr_api_key='your_api_key'
+
+print('Trying Google')
+print('Start Time: ' + str(datetime.datetime.now()))
+if use_proxy:
+  response = requests.get('https://google.com/', proxies=proxies, timeout=timeout)
+else:
+  response = requests.get('https://google.com/', timeout=timeout)
+
+print(response)
+print('  End Time: ' + str(datetime.datetime.now()))
+
+
+print('\n')
+print('Start Time: ' + str(datetime.datetime.now()))
+print('Trying New Relic API @ ' + newr_url)
+
+# set up the headers
+headers = {'X-Api-Key':'{}'.format(newr_api_key)}
+print('  Headers= ' + str(headers))
+
+if use_proxy:
+  response = requests.get(newr_url, headers=headers, timeout=timeout, proxies=proxies)
+else:
+  response = requests.get(newr_url, headers=headers, timeout=timeout)
+
+print(response)
+print('  End Time: ' + str(datetime.datetime.now()))
+
+
+##### Run this command
+#/opt/splunk/bin/splunk cmd python3 test_connection3.py
+ 
+
+ # New Relic helpers
+website:  https://rpm.newrelic.com/api/explore/applications/list
+command (no proxy): curl -X GET 'https://api.newrelic.com/v2/applications.json' \
+     -H 'X-Api-Key:{api_key}' -i 
+
+
+-----------------------------------------------------------------------
+ 
+
+# Create a test_connection3.py file (python3)  for AppDynamics
 import datetime
 import requests
 import base64
@@ -52,7 +108,7 @@ print('  End Time: ' + str(datetime.datetime.now()))
  
 -----------------------------------------------------------------------
  
-# Create a test_connection27.py file (python2.7)
+# Create a test_connection27.py file (python2.7)     for AppDynamics
 
 import datetime
 import urllib2

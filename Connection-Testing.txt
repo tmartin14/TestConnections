@@ -48,9 +48,9 @@ print('  End Time: ' + str(datetime.datetime.now()))
  
 
  # New Relic helpers
-website:  https://rpm.newrelic.com/api/explore/applications/list
-command (no proxy): curl -X GET 'https://api.newrelic.com/v2/applications.json' \
-     -H 'X-Api-Key:{api_key}' -i 
+#website:  https://rpm.newrelic.com/api/explore/applications/list
+#command (no proxy): curl -X GET 'https://api.newrelic.com/v2/applications.json'  -H 'X-Api-Key:{api_key}' -i 
+#command (w/proxy) : curl -v -L -x http://proxy.zzzz.com:8080 --proxy-user user:pass -X GET 'https://api.newrelic.com/v2/applications.json'  -H 'X-Api-Key:{api_key}' -i 
 
 
 -----------------------------------------------------------------------
@@ -154,8 +154,8 @@ print('  End Time: ' + str(datetime.datetime.now()))
 -----------------------------------------------------------------------
  
  # AppDynamics helpers
-website:  https://docs.appdynamics.com/display/PRO45/Application+Model+API#ApplicationModelAPI-RetrieveAllBusinessApplications
-command (no proxy): curl -v -L user:pass --user user1@customer1:appd_password "https://host:port/controller/rest/applications" 
+#website:  https://docs.appdynamics.com/display/PRO45/Application+Model+API#ApplicationModelAPI-RetrieveAllBusinessApplications
+#command (no proxy): curl -v -L user:pass --user user1@customer1:appd_password "https://host:port/controller/rest/applications" 
 
-command (w/proxy) : curl -v -L -x http://proxy.zzzz.com:8080 --proxy-user user:pass --user user1@customer1:appd_password "https://host:port/controller/rest/applications"
+#command (w/proxy) : curl -v -L -x http://proxy.zzzz.com:8080 --proxy-user user:pass --user user1@customer1:appd_password "https://host:port/controller/rest/applications"
 

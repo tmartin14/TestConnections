@@ -8,10 +8,7 @@ import base64
 # Variables
 timeout=3
 use_proxy=False
-proxies = {
-    'http': 'http://username:password@10.10.1.0:3128',
-    'https': 'https://username:password@10.10.1.0:3128',
-}
+proxyurl='http://username:password@proxy.zzzz.com:8080'
 newr_url='https://api.newrelic.com/v2/applications.json'
 newr_api_key='your_api_key'
 
@@ -52,6 +49,109 @@ print('  End Time: ' + str(datetime.datetime.now()))
 #command (no proxy): curl -X GET 'https://api.newrelic.com/v2/applications.json'  -H 'X-Api-Key:{api_key}' -i 
 #command (w/proxy) : curl -v -L -x http://proxy.zzzz.com:8080 --proxy-user user:pass -X GET 'https://api.newrelic.com/v2/applications.json'  -H 'X-Api-Key:{api_key}' -i 
 
+ 
+-----------------------------------------------------------------------
+
+# Create a test_connection27.py file (python2)  for New Relic
+import datetime
+import urllib2
+import base64
+
+# Variables
+timeout=3
+use_proxy=False
+proxies = {
+    'http': 'http://username:password@10.10.1.0:3128',
+    'https': 'https://username:password@10.10.1.0:3128',
+}
+newr_url='https://api.newrelic.com/v2/applications.json'
+newr_api_key='your_api_key'
+
+# Setup the proxy
+proxy = urllib2.ProxyHandler({'http': proxyurl})
+opener = urllib2.build_opener(proxy)
+urllib2.install_opener(opener)
+
+print('Start Time: ' + str(datetime.datetime.now()))
+print('Trying Google')
+response = urllib2.urlopen('https://google.com/',timeout=timeout)
+print(response.getcode())
+print('  End Time: ' + str(datetime.datetime.now()))
+
+
+print('\n')
+print('Start Time: ' + str(datetime.datetime.now()))
+print('Trying New Relic API @ ' + newr_url)
+
+# set up the headers
+headers = {'X-Api-Key':'{}'.format(newr_api_key)}
+print('  Headers= ' + str(headers))
+
+# Test the connection
+request =  urllib2.Request(appd_url, headers=headers)
+response = urllib2.urlopen(request, timeout=timeout)
+
+print(response.code)
+print(response.read())
+print('  End Time: ' + str(datetime.datetime.now()))
+
+
+##### Run this command
+#/opt/splunk/bin/splunk cmd python2 test_connection27.py
+ 
+
+
+
+-----------------------------------------------------------------------
+#  Create a test_connection27.py file (python2)  for New Relic Insights
+import datetime
+import urllib2
+import base64
+
+# Variables
+timeout=3
+use_proxy=False
+proxyurl='http://username:password@proxy.zzzz.com:8080'
+
+#newr_url='https://api.newrelic.com/v2/applications.json'
+newr_url='https://insights-api.newrelic.com/v1/accounts/<your account>/query?nrql=SELECT%20average(duration)%20FROM%20PageView'
+newr_api_key='your_api_key'
+
+
+# Setup the proxy
+proxy = urllib2.ProxyHandler({'http': proxyurl})
+opener = urllib2.build_opener(proxy)
+urllib2.install_opener(opener)
+
+print('*******   Start Time: ' + str(datetime.datetime.now()))
+print('Trying Google')
+response = urllib2.urlopen('https://google.com/',timeout=timeout)
+print(response.getcode())
+print('*******   End Time: ' + str(datetime.datetime.now()))
+print('\n')
+
+
+print('*******  Start Time: ' + str(datetime.datetime.now()))
+print('Trying New Relic API @ ' + newr_url)
+
+# set up the headers
+#headers = {'X-Api-Key':'{}'.format(newr_api_key)}
+headers = {'X-Query-Key':'{}'.format(newr_api_key)}
+print('  Headers= ' + str(headers))
+
+# Test the connection
+request =  urllib2.Request(newr_url, headers=headers)
+response = urllib2.urlopen(request, timeout=timeout)
+
+print(response.code)
+print(response.read())
+
+print('*******  End Time: ' + str(datetime.datetime.now()))
+print('\n')
+
+
+##### Run this command
+#/opt/splunk/bin/splunk cmd python2 test_connection27.py
 
 -----------------------------------------------------------------------
  
@@ -104,7 +204,6 @@ print('  End Time: ' + str(datetime.datetime.now()))
 #/opt/splunk/bin/splunk cmd python3 test_connection3.py
  
 
-
  
 -----------------------------------------------------------------------
  
@@ -117,7 +216,7 @@ import base64
 # Varialbes
 timeout=3
 proxyurl='http://username:password@proxy.zzzz.com:8080'
-appd_url='https://pss-it-appd-controller.prod.aws.glic.com:8181/controller/rest/applications'
+appd_url='https://your-appd-controller:8181/controller/rest/applications'
 appd_connect_string = "appd_user@customer1:appd_password"
 
 
@@ -144,6 +243,8 @@ headers =  {'Authorization': 'Basic {}'.format(auth_token)}
 request =  urllib2.Request(appd_url, headers=headers)
 response = urllib2.urlopen(request, timeout=timeout)
 
+print(response.code)
+print(response.read())
 print('  End Time: ' + str(datetime.datetime.now()))
 
 

@@ -1,6 +1,6 @@
 Connection Testing - Making sure Splunk can access the outside world.
 
-# Create a test_connection3.py file (python3)  for New Relic
+# Create a test_connection3.py file (python3) for New Relic
 import datetime
 import requests
 import base64
@@ -50,9 +50,10 @@ print('  End Time: ' + str(datetime.datetime.now()))
 #command (w/proxy) : curl -v -L -x http://proxy.zzzz.com:8080 --proxy-user user:pass -X GET 'https://api.newrelic.com/v2/applications.json'  -H 'X-Api-Key:{api_key}' -i 
 
  
+
 -----------------------------------------------------------------------
 
-# Create a test_connection27.py file (python2)  for New Relic
+# Create a test_connection27.py file (python2) for New Relic
 import datetime
 import urllib2
 import base64
@@ -101,8 +102,8 @@ print('  End Time: ' + str(datetime.datetime.now()))
  
 
 
-
 -----------------------------------------------------------------------
+
 #  Create a test_connection27.py file (python2)  for New Relic Insights
 import datetime
 import urllib2
@@ -153,8 +154,8 @@ print('\n')
 ##### Run this command
 #/opt/splunk/bin/splunk cmd python2 test_connection27.py
 
+
 -----------------------------------------------------------------------
- 
 
 # Create a test_connection3.py file (python3)  for AppDynamics
 import datetime
